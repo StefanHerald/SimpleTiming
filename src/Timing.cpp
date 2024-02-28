@@ -53,7 +53,10 @@ void Timing::_handle(byte index, unsigned long current)
   void (*func)() = _timers[index].f;
   (*func)();
   _timers[index].initTime = current;
-  if(_timers[index].repeat != 255 || _timers[index].repeat != 0)
+  bool is255 = _timers[index].repeat == byte(255);
+  bool is0   = _timers[index].repeat == byte(0);
+  bool result = is255 || is0;
+  if(!result)
   {
     --_timers[index].repeat;
   }
@@ -70,7 +73,7 @@ void Timing::_checkAll(unsigned long current)
 
   for(byte i = 0; i < itemCount; i++)
   {
-    if(_timers[i].repeat == 0)
+    if(_timers[i].repeat == byte(0))
     {
        _timers.Remove(i);
        --i;
