@@ -65,7 +65,7 @@ void Timing::_checkAll(unsigned long current)
 
   for(byte i = 0; i < itemCount; i++)
   {
-    if(current - _timers[i].initTime >= _timers[i].delay) {_handle(i, current);}
+    if(current - _timers[i].initTime >= _timers[i].delay) {_handle(i, current); itemCount = _timers.Count();}
   }
 
   for(byte i = 0; i < itemCount; i++)
