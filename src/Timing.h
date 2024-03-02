@@ -12,7 +12,8 @@ Released into the public domain
 struct Timer{
   unsigned int delay;
   unsigned long initTime;
-  void (*f)();
+  void (*onDelay)();
+  void (*onRemove)();
   byte repeat;
   byte ID;
 }; //should only cost 8 + 4 + 1 + 1 = 14 bytes per timer. (struct says 8 bytes)
@@ -21,9 +22,11 @@ class Timing
 {
   public:
           Timing();
-          byte addTimer(unsigned int delay, byte repeat, void (*f)());
+          byte addTimer(unsigned int delay, byte repeat, void (*onDelay)(), void (*onRemove)());
           void removeTimer(byte ID);
+          void removeTimerWithoutFunc(byte ID);
           void removeAll();
+          void removeAllWithoutFunc();
           void tick();
           void tick(unsigned int time);
   

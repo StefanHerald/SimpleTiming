@@ -53,6 +53,10 @@ void loop()
   }
 }
 
+void useless(){
+  return;
+}
+
 void increaseLumRed()
 {
   red += 5;
@@ -78,11 +82,11 @@ void reset(){
   red    = 0;
   yellow = 0;
   green  = 0;
-  id = allTimers.addTimer(1000, 255,increaseLumRed); //will run indefinitely
-  allTimers.addTimer(1000, 15, increaseLumYellow); //will run for 15 secondes
-  allTimers.addTimer(1534, 15, increaseLumGreen); //will run for 23.01 seconds
-  allTimers.addTimer(10000, 1, removeRed); //remove first timer after 10 seconds
-  allTimers.addTimer(30000, 1, reset); //reset everything after 30 seconds
+  id = allTimers.addTimer(1000, 255,increaseLumRed, blink); //will run indefinitely
+  allTimers.addTimer(1000, 15, increaseLumYellow, blink); //will run for 15 secondes
+  allTimers.addTimer(1534, 15, increaseLumGreen, blink); //will run for 23.01 seconds
+  allTimers.addTimer(10000, 1, removeRed, useless); //remove first timer after 10 seconds
+  allTimers.addTimer(30000, 1, reset, useless); //reset everything after 30 seconds
   Serial.println("reset!");
 }
 
@@ -90,7 +94,7 @@ void checkButton(){
   bool newButtonState = digitalRead(buttonPin);
   if (buttonState != newButtonState){
     casingButton = true;
-    allTimers.addTimer(6, 1, caseButton);
+    allTimers.addTimer(6, 1, caseButton, useless);
   }
 }
 

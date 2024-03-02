@@ -18,11 +18,11 @@ Timing::Timing()
  _timers = timers;
 }
 
-byte Timing::addTimer(unsigned int delay, byte repeat, void (*f)())
+byte Timing::addTimer(unsigned int delay, byte repeat, void (*onDelay)(), void (*onRemove)())
 {
   byte id = _id;
   unsigned long current = millis();
-  struct Timer newTimer = {delay, current, f, repeat, id};
+  struct Timer newTimer = {delay, current, onDelay, onRemove, repeat, id};
   _timers.Add(newTimer);
   _id++;
   return id;
@@ -30,6 +30,20 @@ byte Timing::addTimer(unsigned int delay, byte repeat, void (*f)())
 
 void Timing::removeTimer(byte ID)
 {
+  for(byte i = 0; i < _timers.Count(); i++)
+  {
+    if(_timers[i].ID == ID) 
+    {  
+      void (*func)() = _timers[i].onRemove;
+      (*func)();
+      _timers.Remove(i);
+      _timers.Trim(2); 
+      return;
+    }
+  }
+}
+
+void Timing::removeTimerWithoutFunc(byte ID){
   for(byte i = 0; i < _timers.Count(); i++)
   {
     if(_timers[i].ID == ID) 
@@ -43,14 +57,25 @@ void Timing::removeTimer(byte ID)
 
 void Timing::removeAll()
 {
+  byte itemCount = _timers.Count();
+  for(int i = 0; i < itemCount; i++)
+  {
+    void (*func)() = _timers[i].onRemove;
+    (*func)();
+  }
+  removeAllWithoutFunc();
+}
+
+void Timing::removeAllWithoutFunc()
+{
   _timers.Clear();
-  _timers.Trim(4); //maybe just a new list?
+  _timers.Trim(4);
   _id = 0;
 }
 
 void Timing::_handle(byte index, unsigned long current)
 {
-  void (*func)() = _timers[index].f;
+  void (*func)() = _timers[index].onDelay;
   (*func)();
   _timers[index].initTime = current;
   bool is255 = _timers[index].repeat == byte(255);
@@ -68,13 +93,15 @@ void Timing::_checkAll(unsigned long current)
 
   for(byte i = 0; i < itemCount; i++)
   {
-    if(current - _timers[i].initTime >= _timers[i].delay) {_handle(i, current); itemCount = _timers.Count();}
+    if(current - _timers[i].initTime >= _timers[i].delay) {_handle(i, current); itemCount = _timers.Count();} //timers can add or subtract other timers
   }
 
   for(byte i = 0; i < itemCount; i++)
   {
     if(_timers[i].repeat == byte(0))
     {
+       void (*func)() = _timers[i].onRemove;
+       (*func)();
        _timers.Remove(i);
        --i;
        --itemCount;
