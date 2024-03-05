@@ -22,7 +22,7 @@ byte Timing::addTimer(unsigned int delay, byte repeat, void (*onDelay)(), void (
 {
   byte id = _id;
   unsigned long current = millis();
-  struct Timer newTimer = {delay, current, onDelay, onRemove, repeat, id};
+  struct Timer newTimer = {current, delay, onDelay, onRemove, repeat, id};
   _timers.Add(newTimer);
   _id++;
   return id;
@@ -37,7 +37,6 @@ void Timing::removeTimer(byte ID)
       void (*func)() = _timers[i].onRemove;
       (*func)();
       _timers.Remove(i);
-      _timers.Trim(2); 
       return;
     }
   }
@@ -49,7 +48,6 @@ void Timing::removeTimerWithoutFunc(byte ID){
     if(_timers[i].ID == ID) 
     {  
       _timers.Remove(i);
-      _timers.Trim(2); //might be better, but still need to test
       return;
     }
   }
@@ -78,12 +76,12 @@ void Timing::_handle(byte index, unsigned long current)
   void (*func)() = _timers[index].onDelay;
   (*func)();
   _timers[index].initTime = current;
-  bool is255 = _timers[index].repeat == byte(255);
-  bool is0   = _timers[index].repeat == byte(0);
+  bool is255 = _timers[index].repeat == 255;
+  bool is0   = _timers[index].repeat == 0;
   bool result = is255 || is0;
   if(!result)
   {
-    --_timers[index].repeat;
+    _timers[index].repeat--;
   }
 }
 
@@ -104,7 +102,7 @@ void Timing::_checkAll(unsigned long current)
        (*func)();
        _timers.Remove(i);
        --i;
-       --itemCount;
+       itemCount = _timers.Count();
     }
   }
 }
@@ -120,4 +118,5 @@ void Timing::tick(unsigned int time)
   unsigned long current = millis();
   _checkAll(current + (unsigned long)time);
 }
+
 

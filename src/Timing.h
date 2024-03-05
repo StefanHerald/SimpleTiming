@@ -10,13 +10,13 @@ Released into the public domain
 #include <Arduino.h>
 
 struct Timer{
-  unsigned int delay;
   unsigned long initTime;
+  unsigned long delay;
   void (*onDelay)();
   void (*onRemove)();
   byte repeat;
   byte ID;
-}; //should only cost 8 + 4 + 1 + 1 = 14 bytes per timer. (struct says 8 bytes)
+}; 
 
 class Timing
 {
@@ -32,7 +32,7 @@ class Timing
   
   private:
           List<Timer> _timers;
-          byte _id;
+          byte _id; 
           void _checkAll(unsigned long current);
           void _handle(byte index, unsigned long current);
 };

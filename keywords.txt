@@ -4,3 +4,5 @@ AddTimer	KEYWORD2
 RemoveTimer	KEYWORD2
 RemoveAll	KEYWORD2
 Tick	KEYWORD2
+removeTimerWithoutFunc	KEYWORD2
+removeAllWithoutFunc	KEYWORD2
