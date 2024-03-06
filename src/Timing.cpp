@@ -18,13 +18,23 @@ Timing::Timing()
  _timers = timers;
 }
 
+byte Timing::_getID()
+{
+  byte itemCount = _timers.Count();
+  _id++;
+  for(int i = 0; i < itemCount; i++)
+  {
+    if(_timers[i].ID == _id) { _id++;} //to help prevent weird errors where a call on Remove, removes the wrong timer. Not perfect, but should help
+  }
+  return _id;
+}
+
 byte Timing::addTimer(unsigned int delay, byte repeat, void (*onDelay)(), void (*onRemove)())
 {
-  byte id = _id;
+  byte id = _getID();
   unsigned long current = millis();
   struct Timer newTimer = {current, delay, onDelay, onRemove, repeat, id};
   _timers.Add(newTimer);
-  _id++;
   return id;
 }
 

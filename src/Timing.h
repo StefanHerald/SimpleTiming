@@ -35,6 +35,7 @@ class Timing
           byte _id; 
           void _checkAll(unsigned long current);
           void _handle(byte index, unsigned long current);
+          byte _getID();
 };
 
 #endif
