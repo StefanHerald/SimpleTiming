@@ -10,15 +10,15 @@ We can also try to use the timer interrupts. Problem is, we have 3 of those and 
 
 Probably also want a function to be run when the timer is removed: for example, when a LED timer is removed, we might also want to add a func that turns it off as well.
 */
-#include <Timing.h>
+#include <SimpleTiming.h>
 
-Timing::Timing()
+SimpleTiming::SimpleTiming()
 {
   List<Timer> timers;
  _timers = timers;
 }
 
-byte Timing::_getID()
+byte SimpleTiming::_getID()
 {
   byte itemCount = _timers.Count();
   _id++;
@@ -29,7 +29,7 @@ byte Timing::_getID()
   return _id;
 }
 
-byte Timing::addTimer(unsigned int delay, byte repeat, void (*onDelay)(), void (*onRemove)())
+byte SimpleTiming::addTimer(unsigned int delay, byte repeat, void (*onDelay)(), void (*onRemove)())
 {
   byte id = _getID();
   unsigned long current = millis();
@@ -38,7 +38,7 @@ byte Timing::addTimer(unsigned int delay, byte repeat, void (*onDelay)(), void (
   return id;
 }
 
-void Timing::removeTimer(byte ID)
+void SimpleTiming::removeTimer(byte ID)
 {
   for(byte i = 0; i < _timers.Count(); i++)
   {
@@ -52,7 +52,7 @@ void Timing::removeTimer(byte ID)
   }
 }
 
-void Timing::removeTimerWithoutFunc(byte ID){
+void SimpleTiming::removeTimerWithoutFunc(byte ID){
   for(byte i = 0; i < _timers.Count(); i++)
   {
     if(_timers[i].ID == ID) 
@@ -63,7 +63,7 @@ void Timing::removeTimerWithoutFunc(byte ID){
   }
 }
 
-void Timing::removeAll()
+void SimpleTiming::removeAll()
 {
   byte itemCount = _timers.Count();
   for(int i = 0; i < itemCount; i++)
@@ -74,14 +74,14 @@ void Timing::removeAll()
   removeAllWithoutFunc();
 }
 
-void Timing::removeAllWithoutFunc()
+void SimpleTiming::removeAllWithoutFunc()
 {
   _timers.Clear();
   _timers.Trim(4);
   _id = 0;
 }
 
-void Timing::_handle(byte index, unsigned long current)
+void SimpleTiming::_handle(byte index, unsigned long current)
 {
   void (*func)() = _timers[index].onDelay;
   (*func)();
@@ -95,7 +95,7 @@ void Timing::_handle(byte index, unsigned long current)
   }
 }
 
-void Timing::_checkAll(unsigned long current)
+void SimpleTiming::_checkAll(unsigned long current)
 {
   byte itemCount = _timers.Count();
 
@@ -117,13 +117,13 @@ void Timing::_checkAll(unsigned long current)
   }
 }
 
-void Timing::tick()
+void SimpleTiming::tick()
 {
   unsigned long current = millis();
   _checkAll(current);
 }
 
-void Timing::tick(unsigned int time)
+void SimpleTiming::tick(unsigned int time)
 {
   unsigned long current = millis();
   _checkAll(current + (unsigned long)time);

@@ -3,8 +3,8 @@ Very basic timing class using the List structure from Luis at luisllamasbinaburo
 Created by Stefan Herald, sdn: 0960543, Feb 24, 2024.
 Released into the public domain
 */
-#ifndef _Timing_h
-#define _Timing_h
+#ifndef _SimpleTiming_h
+#define _SimpleTiming_h
 
 #include <ListLib.h> //from luisllamasbinaburo/Arduino-List
 #include <Arduino.h>
@@ -18,10 +18,10 @@ struct Timer{
   byte ID;
 }; 
 
-class Timing
+class SimpleTiming
 {
   public:
-          Timing();
+          SimpleTiming();
           byte addTimer(unsigned int delay, byte repeat, void (*onDelay)(), void (*onRemove)());
           void removeTimer(byte ID);
           void removeTimerWithoutFunc(byte ID);

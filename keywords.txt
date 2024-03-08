@@ -1,5 +1,5 @@
 Timer	KEYWORD1
-Timing	KEYWORD1
+SimpleTiming	KEYWORD1
 AddTimer	KEYWORD2
 RemoveTimer	KEYWORD2
 RemoveAll	KEYWORD2

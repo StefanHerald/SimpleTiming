@@ -1,8 +1,8 @@
 /*
-A simple program demonstrating all the different functions of Timing.
+A simple program demonstrating all the different functions of SimpleTiming.
 */
 
-#include <Timing.h>
+#include <SimpleTiming.h>
 
 //on board LED
 const int boardLed = LED_BUILTIN;
@@ -24,8 +24,8 @@ bool casingButton = false;
 //id of red Timer.
 byte id = 0;
 
-//create an instance of the Timing class called allTimers
-Timing allTimers;
+//create an instance of the SimpleTiming class called allTimers
+SimpleTiming allTimers;
 
 void setup() 
 {
